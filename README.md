@@ -1,7 +1,5 @@
 # Objectives
 
-![](images/slide.png)
-
 ## Lab Overview
 
 The Intel® IoT Gateway provides number of Security features both at hardware and software level to securely execute your IoT applications. In this lab we will go through following features:
