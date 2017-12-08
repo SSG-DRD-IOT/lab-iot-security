@@ -12,53 +12,60 @@ The Intel® IoT Gateway provides number of Security features both at hardware an
 
 ## Software/OS security features
 
-There are several OS level security options that can be utilized on your Intel® IoT Gateway. Ubuntu has several features like AppArmor, home folder encryption during installation, firewalls etc. to protect your content. There are also tools like encfs to encrypt specific folders
+There are several OS level security options that can be utilized on your Intel® IoT Gateway. Ubuntu has several features like AppArmor, home folder encryption during installation, firewalls etc. to protect your content. There are also tools like CryFS to encrypt specific folders
 
 In this lab we will look at some software/OS level tools/option available to secure your IoT applications running on the gateway
 
-## Folder encryption using encfs
+## Folder encryption using CryFS
 
-Encfs is an application that allows you to create encrypted directories, any file that is placed in such a directory will be encrypted. To open an encrypted directory you need a correct password.
+CryFS is an application that allows you to create encrypted directories, any file that is placed in such a directory will be encrypted. To open an encrypted directory you need a correct password.
 
-It is one of several utilities/options available on Ubuntu for encrypting your content. Follow below steps to set up encfs on your Intel® IoT Gateway
+It is one of several utilities/options available on Ubuntu for encrypting your content. Follow below steps to set up CryFS on your Intel® IoT Gateway
 
 *   Open a ssh terminal to your device and type:
 
 ```bash
-        sudo apt install encfs
+        wget -O - https://www.cryfs.org/install.sh | sudo bash
 ```
 
-*   You are now ready to create encrypted directory. The application encfs will create one directory which contains the encrypted files and one directory where the files are unlocked and accessible. The syntax for encfs is: "encfs {path to encrypted directory} {path to visible directory}"
+*   You are now ready to create encrypted directory. The application CryFS will create one directory which contains the encrypted files and one directory where the files are unlocked and accessible. The syntax for CryFS is: "CryFS {path to encrypted directory} {path to visible directory}"
 
     For example, If you wish to have a directory in home directory called visible and another one called encrypted:
-```bash
-mkdir ~/.encrypted
-encfs ~/.encrypted ~/visible
-```
-    First encfs will ask you to create the selected directories. Simply type 'y'. Then it asks which degree of encryption that should be used, simply press enter to use default encryption-level. At last encfs will ask you for the password that is needed to reach the encrypted information.
 
-    If all goes well and there is no error you can start creating content in this directory
+```bash
+
+cryfs ~/.encrypted ~/visible
+
+```
+
+* First CryFS will ask you to create the selected directories. Simply type 'y'. Then it asks which degree of encryption that should be used, simply press enter to use default encryption-level. At last CryFS will ask you for the password that is needed to reach the encrypted information.
+
+*  If all goes well and there is no error you can start creating content in this directory
 
 *   Let's create a sample file in the directory. For e.g. we create one file here myfile and save it
+
 ```bash
 vi ~/visible/myfile
 ```
-    Save the file with a ":wq" command in vi editor
+
+* Save the file with a ":wq" command in vi editor
 
 *   In order to close the ~/visible directory simply type:
+
 ```bash
 fusermount -u ~/visible
 ```
-    As long as the directory is closed all the information in ~/visible will seem to have disappeared. The only way to gain access to this information again is by unlocking it
+* As long as the directory is closed all the information in ~/visible will seem to have disappeared. The only way to gain access to this information again is by unlocking it
 
-    Now if you browse to directory ~/visible you will not see myfile there.
+*  Now if you browse to directory ~/visible you will not see myfile there.
 
 *   To unlock the directory and have access to content, again type the following command
+
 ```bash
-encfs ~/.encrypted ~/visible
+cryfs ~/.encrypted ~/visible
 ```
 
-    Give the password for the directory and then you should see the content of the directory, in our case myfile will be now visible
+* Give the password for the directory and then you should see the content of the directory, in our case myfile will be now visible
 
 *   It is also possible to automatically mount the directory at login in a secure way
 
